@@ -139,6 +139,7 @@ void ShiftRows(uint8_t state[16]) {
      *   - Left rotate row r by r positions
      *   - Column-major indexing via IDX(r,c)
      */
+    
     (void)state;
 }
 
@@ -168,6 +169,23 @@ void MixColumns(uint8_t state[16]) {
      *       s'3 = 03•s0 ⊕ 01•s1 ⊕ 01•s2 ⊕ 02•s3
      *   - Write results back to the same column
      */
+
+    for (int i=0; i<4; i++){
+        uint8_t s0 = state[IDX(0,i)];
+        uint8_t s1 = state[IDX(1,i)];
+        uint8_t s2 = state[IDX(2,i)];
+        uint8_t s3 = state[IDX(3,i)];
+
+        uint8_t s0_prime = (xtime(s0)) ^ (xtime(s1)^s1) ^ (0x01*s2) ^ (0x01*s3);
+        uint8_t s1_prime = (0x01*s0) ^ (xtime(s1)) ^ (xtime(s2)^s2) ^ (0x01*s3);
+        uint8_t s2_prime = (0x01*s0) ^ (0x01*s1) ^ (xtime(s2)) ^ (xtime(s3)^s3);
+        uint8_t s3_prime = (xtime(s0)^s0) ^ (0x01*s1) ^ (0x01*s2) ^ (xtime(s3));
+
+        state[IDX(0,i)] = s0_prime;
+        state[IDX(1,i)] = s1_prime;
+        state[IDX(2,i)] = s2_prime;
+        state[IDX(3,i)] = s3_prime;
+    }
     (void)state;
 }
 
@@ -176,6 +194,23 @@ void InvMixColumns(uint8_t state[16]) {
      *   - Use inverse matrix with multipliers 0x0E,0x0B,0x0D,0x09
      *   - You may implement mul9/mul11/mul13/mul14 using xtime chains
      */
+    for (int i=0; i<4; i++){
+        uint8_t s0 = state[IDX(0,i)];
+        uint8_t s1 = state[IDX(1,i)];
+        uint8_t s2 = state[IDX(2,i)];
+        uint8_t s3 = state[IDX(3,i)];
+
+        uint8_t s0_prime = (xtime(s0)^xtime(xtime(s0))^xtime(xtime(xtime(s0)))) ^ (xtime(xtime(xtime(s1)))^xtime(s1)^s1) ^ (xtime(xtime(s2))^xtime(xtime(xtime(s2)))^s2) ^ (xtime(xtime(xtime(s3)))^s3);
+        uint8_t s1_prime = (xtime(xtime(xtime(s0)))^s0) ^ (xtime(s1)^xtime(xtime(s1))^xtime(xtime(xtime(s1)))) ^ (xtime(xtime(xtime(s2)))^xtime(s2)^s2) ^ (xtime(xtime(s3))^xtime(xtime(xtime(s3)))^s3);
+        uint8_t s2_prime = (xtime(xtime(s0))^xtime(xtime(xtime(s0)))^s0) ^ (xtime(xtime(xtime(s1)))^s1) ^ (xtime(s2)^xtime(xtime(s2))^xtime(xtime(xtime(s2)))) ^ (xtime(xtime(xtime(s3)))^xtime(s3)^s3);
+        uint8_t s3_prime = (xtime(xtime(xtime(s0)))^xtime(s0)^s0) ^ (xtime(xtime(s1))^xtime(xtime(xtime(s1)))^s1) ^ (xtime(xtime(xtime(s2)))^s2) ^ (xtime(s3)^xtime(xtime(s3))^xtime(xtime(xtime(s3))));
+
+        state[IDX(0,i)] = s0_prime;
+        state[IDX(1,i)] = s1_prime;
+        state[IDX(2,i)] = s2_prime;
+        state[IDX(3,i)] = s3_prime;
+    }
+
     (void)state;
 }
 
