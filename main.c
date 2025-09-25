@@ -148,15 +148,80 @@ void ShiftRows(uint8_t state[16]) {
      *   - Left rotate row r by r positions
      *   - Column-major indexing via IDX(r,c)
      */
-    
-    (void)state;
+    // Row 0: no shift
+    // Row 1: left rotate by 1
+    {
+        uint8_t t0 = state[IDX(1,0)];
+        uint8_t t1 = state[IDX(1,1)];
+        uint8_t t2 = state[IDX(1,2)];
+        uint8_t t3 = state[IDX(1,3)];
+        state[IDX(1,0)] = t1;
+        state[IDX(1,1)] = t2;
+        state[IDX(1,2)] = t3;
+        state[IDX(1,3)] = t0;
+    }
+    // Row 2: left rotate by 2
+    {
+        uint8_t t0 = state[IDX(2,0)];
+        uint8_t t1 = state[IDX(2,1)];
+        uint8_t t2 = state[IDX(2,2)];
+        uint8_t t3 = state[IDX(2,3)];
+        state[IDX(2,0)] = t2;
+        state[IDX(2,1)] = t3;
+        state[IDX(2,2)] = t0;
+        state[IDX(2,3)] = t1;
+    }
+    // Row 3: left rotate by 3 (equiv. right rotate by 1)
+    {
+        uint8_t t0 = state[IDX(3,0)];
+        uint8_t t1 = state[IDX(3,1)];
+        uint8_t t2 = state[IDX(3,2)];
+        uint8_t t3 = state[IDX(3,3)];
+        state[IDX(3,0)] = t3;
+        state[IDX(3,1)] = t0;
+        state[IDX(3,2)] = t1;
+        state[IDX(3,3)] = t2;
+    }
 }
 
 void InvShiftRows(uint8_t state[16]) {
     /* TODO:
      *   - Right rotate row r by r positions (inverse of ShiftRows)
      */
-    (void)state;
+    // Row 0: no shift
+    // Row 1: right rotate by 1
+    {
+        uint8_t t0 = state[IDX(1,0)];
+        uint8_t t1 = state[IDX(1,1)];
+        uint8_t t2 = state[IDX(1,2)];
+        uint8_t t3 = state[IDX(1,3)];
+        state[IDX(1,0)] = t3;
+        state[IDX(1,1)] = t0;
+        state[IDX(1,2)] = t1;
+        state[IDX(1,3)] = t2;
+    }
+    // Row 2: right rotate by 2
+    {
+        uint8_t t0 = state[IDX(2,0)];
+        uint8_t t1 = state[IDX(2,1)];
+        uint8_t t2 = state[IDX(2,2)];
+        uint8_t t3 = state[IDX(2,3)];
+        state[IDX(2,0)] = t2;
+        state[IDX(2,1)] = t3;
+        state[IDX(2,2)] = t0;
+        state[IDX(2,3)] = t1;
+    }
+    // Row 3: right rotate by 3 (equiv. left rotate by 1)
+    {
+        uint8_t t0 = state[IDX(3,0)];
+        uint8_t t1 = state[IDX(3,1)];
+        uint8_t t2 = state[IDX(3,2)];
+        uint8_t t3 = state[IDX(3,3)];
+        state[IDX(3,0)] = t1;
+        state[IDX(3,1)] = t2;
+        state[IDX(3,2)] = t3;
+        state[IDX(3,3)] = t0;
+    }
 }
 
 /* xtime helper (multiply by 0x02 in GF(2^8)) — useful for MixColumns */
