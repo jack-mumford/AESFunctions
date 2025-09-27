@@ -189,7 +189,7 @@ void InvShiftRows(uint8_t state[16]) {
     // x = 5: 3 - (5 mod 4) = 3 - 1 = 2
     // x = 6: 3 - (6 mod 4) = 3 - 2 = 1
     // x = 7: 3 - (7 mod 4) = 3 - 3 = 0
-// x = 8: 3 - (8 mod 4) = 3 - 0 = 3
+    // x = 8: 3 - (8 mod 4) = 3 - 0 = 3
 
     uint8_t arr[4];
 
@@ -198,44 +198,11 @@ void InvShiftRows(uint8_t state[16]) {
         arr[1] = state[IDX(i,1)];
         arr[2] = state[IDX(i,2)];
         arr[3] = state[IDX(i,3)];
-        state[IDX(i,0)] = arr[3-((i)%4)];
-        state[IDX(i,1)] = arr[3-((i+1)%4)];
-        state[IDX(i,2)] = arr[3-((i+2)%4)];
-        state[IDX(i,3)] = arr[3-((i+3)%4)];
+        state[IDX(i,0)] = arr[(0+4-i) % 4];
+        state[IDX(i,1)] = arr[(1+4-i) % 4];
+        state[IDX(i,2)] = arr[(2+4-i) % 4];
+        state[IDX(i,3)] = arr[(3+4-i) % 4];
     }
-
-    // {
-    //     uint8_t t0 = state[IDX(1,0)];
-    //     uint8_t t1 = state[IDX(1,1)];
-    //     uint8_t t2 = state[IDX(1,2)];
-    //     uint8_t t3 = state[IDX(1,3)];
-    //     state[IDX(1,0)] = t3;
-    //     state[IDX(1,1)] = t0;
-    //     state[IDX(1,2)] = t1;
-    //     state[IDX(1,3)] = t2;
-    // }
-    // // Row 2: right rotate by 2
-    // {
-    //     uint8_t t0 = state[IDX(2,0)];
-    //     uint8_t t1 = state[IDX(2,1)];
-    //     uint8_t t2 = state[IDX(2,2)];
-    //     uint8_t t3 = state[IDX(2,3)];
-    //     state[IDX(2,0)] = t2;
-    //     state[IDX(2,1)] = t3;
-    //     state[IDX(2,2)] = t0;
-    //     state[IDX(2,3)] = t1;
-    // }
-    // // Row 3: right rotate by 3 (equiv. left rotate by 1)
-    // {
-    //     uint8_t t0 = state[IDX(3,0)];
-    //     uint8_t t1 = state[IDX(3,1)];
-    //     uint8_t t2 = state[IDX(3,2)];
-    //     uint8_t t3 = state[IDX(3,3)];
-    //     state[IDX(3,0)] = t1;
-    //     state[IDX(3,1)] = t2;
-    //     state[IDX(3,2)] = t3;
-    //     state[IDX(3,3)] = t0;
-    // }
 }
 
 /* xtime helper (multiply by 0x02 in GF(2^8)) — useful for MixColumns */
