@@ -249,6 +249,11 @@ void InvMixColumns(uint8_t state[16]) {
      *   - Use inverse matrix with multipliers 0x0E,0x0B,0x0D,0x09
      *   - You may implement mul9/mul11/mul13/mul14 using xtime chains
      */
+
+     // Mul9 = 2*2*2+1 = xtime(xtime(xtime(s))) ⊕ s
+     // Mul11 = 2*2*2+2+1 = xtime(xtime(xtime(s))) ⊕ xtime(s) ⊕ s
+     // Mul13 = 2*2*2+2*2+1 = xtime(xtime(xtime(s))) ⊕ xtime(xtime(s)) ⊕ s
+     // Mul14 = 2*2*2+2*2+2 = xtime(xtime(xtime(s))) ⊕ xtime(xtime(s)) ⊕ xtime(s)
     for (int i=0; i<4; i++){
         uint8_t s0 = state[IDX(0,i)];
         uint8_t s1 = state[IDX(1,i)];
