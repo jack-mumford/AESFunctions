@@ -198,10 +198,10 @@ void InvShiftRows(uint8_t state[16]) {
         arr[1] = state[IDX(i,1)];
         arr[2] = state[IDX(i,2)];
         arr[3] = state[IDX(i,3)];
-        state[IDX(i,0)] = arr[(0+4-i) % 4];
-        state[IDX(i,1)] = arr[(1+4-i) % 4];
-        state[IDX(i,2)] = arr[(2+4-i) % 4];
-        state[IDX(i,3)] = arr[(3+4-i) % 4];
+        state[IDX(i,0)] = arr[(0+4-i)%4];
+        state[IDX(i,1)] = arr[(1+4-i)%4];
+        state[IDX(i,2)] = arr[(2+4-i)%4];
+        state[IDX(i,3)] = arr[(3+4-i)%4];
     }
 }
 
@@ -391,3 +391,4 @@ int main(void) {
 
     return 0;
 }
+
