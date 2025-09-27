@@ -127,7 +127,7 @@ void SubBytes(uint8_t state[16]) {
         state[i]=SBOX[state[i]];
     }
 
-    (void)state; // remove after implementing
+   // (void)state; // remove after implementing
 }
 
 void InvSubBytes(uint8_t state[16]) {
@@ -139,7 +139,7 @@ void InvSubBytes(uint8_t state[16]) {
         state[i]=INV_SBOX[state[i]];
     }
 
-    (void)state;
+   // (void)state;
 }
 
 void ShiftRows(uint8_t state[16]) {
@@ -148,40 +148,30 @@ void ShiftRows(uint8_t state[16]) {
      *   - Left rotate row r by r positions
      *   - Column-major indexing via IDX(r,c)
      */
-    // Row 0: no shift
-    // Row 1: left rotate by 1
-    {
-        uint8_t t0 = state[IDX(1,0)];
-        uint8_t t1 = state[IDX(1,1)];
-        uint8_t t2 = state[IDX(1,2)];
-        uint8_t t3 = state[IDX(1,3)];
-        state[IDX(1,0)] = t1;
-        state[IDX(1,1)] = t2;
-        state[IDX(1,2)] = t3;
-        state[IDX(1,3)] = t0;
-    }
-    // Row 2: left rotate by 2
-    {
-        uint8_t t0 = state[IDX(2,0)];
-        uint8_t t1 = state[IDX(2,1)];
-        uint8_t t2 = state[IDX(2,2)];
-        uint8_t t3 = state[IDX(2,3)];
-        state[IDX(2,0)] = t2;
-        state[IDX(2,1)] = t3;
-        state[IDX(2,2)] = t0;
-        state[IDX(2,3)] = t1;
-    }
-    // Row 3: left rotate by 3 (equiv. right rotate by 1)
-    {
-        uint8_t t0 = state[IDX(3,0)];
-        uint8_t t1 = state[IDX(3,1)];
-        uint8_t t2 = state[IDX(3,2)];
-        uint8_t t3 = state[IDX(3,3)];
-        state[IDX(3,0)] = t3;
-        state[IDX(3,1)] = t0;
-        state[IDX(3,2)] = t1;
-        state[IDX(3,3)] = t2;
-    }
+
+
+    //  x = 0: 0 mod 4 = 0
+    //  x = 1: 1 mod 4 = 1  
+    //  x = 2: 2 mod 4 = 2
+    //  x = 3: 3 mod 4 = 3
+    //  x = 4: 4 mod 4 = 0
+    //  x = 5: 5 mod 4 = 1
+    //  x = 6: 6 mod 4 = 2
+    //  x = 7: 7 mod 4 = 3
+    //  x = 8: 8 mod 4 = 0
+
+    uint8_t arr[4];
+
+     for (int i=1; i<4; i++){
+         arr[0] = state[IDX(i,0)];
+         arr[1] = state[IDX(i,1)];
+         arr[2] = state[IDX(i,2)];
+         arr[3] = state[IDX(i,3)];
+         state[IDX(i,0)] = arr[i%4];
+         state[IDX(i,1)] = arr[(i+1)%4];
+         state[IDX(i,2)] = arr[(i+2)%4];
+         state[IDX(i,3)] = arr[(i+3)%4];
+     }
 }
 
 void InvShiftRows(uint8_t state[16]) {
@@ -190,37 +180,28 @@ void InvShiftRows(uint8_t state[16]) {
      */
     // Row 0: no shift
     // Row 1: right rotate by 1
-    {
-        uint8_t t0 = state[IDX(1,0)];
-        uint8_t t1 = state[IDX(1,1)];
-        uint8_t t2 = state[IDX(1,2)];
-        uint8_t t3 = state[IDX(1,3)];
-        state[IDX(1,0)] = t3;
-        state[IDX(1,1)] = t0;
-        state[IDX(1,2)] = t1;
-        state[IDX(1,3)] = t2;
-    }
-    // Row 2: right rotate by 2
-    {
-        uint8_t t0 = state[IDX(2,0)];
-        uint8_t t1 = state[IDX(2,1)];
-        uint8_t t2 = state[IDX(2,2)];
-        uint8_t t3 = state[IDX(2,3)];
-        state[IDX(2,0)] = t2;
-        state[IDX(2,1)] = t3;
-        state[IDX(2,2)] = t0;
-        state[IDX(2,3)] = t1;
-    }
-    // Row 3: right rotate by 3 (equiv. left rotate by 1)
-    {
-        uint8_t t0 = state[IDX(3,0)];
-        uint8_t t1 = state[IDX(3,1)];
-        uint8_t t2 = state[IDX(3,2)];
-        uint8_t t3 = state[IDX(3,3)];
-        state[IDX(3,0)] = t1;
-        state[IDX(3,1)] = t2;
-        state[IDX(3,2)] = t3;
-        state[IDX(3,3)] = t0;
+
+    //     x = 0: 3 - (0 mod 4) = 3 - 0 = 3
+    // x = 1: 3 - (1 mod 4) = 3 - 1 = 2
+    // x = 2: 3 - (2 mod 4) = 3 - 2 = 1
+    // x = 3: 3 - (3 mod 4) = 3 - 3 = 0
+    // x = 4: 3 - (4 mod 4) = 3 - 0 = 3
+    // x = 5: 3 - (5 mod 4) = 3 - 1 = 2
+    // x = 6: 3 - (6 mod 4) = 3 - 2 = 1
+    // x = 7: 3 - (7 mod 4) = 3 - 3 = 0
+    // x = 8: 3 - (8 mod 4) = 3 - 0 = 3
+
+    uint8_t arr[4];
+
+    for (int i=1; i<4; i++){
+        arr[0] = state[IDX(i,0)];
+        arr[1] = state[IDX(i,1)];
+        arr[2] = state[IDX(i,2)];
+        arr[3] = state[IDX(i,3)];
+        state[IDX(i,0)] = arr[(0+4-i) % 4];
+        state[IDX(i,1)] = arr[(1+4-i) % 4];
+        state[IDX(i,2)] = arr[(2+4-i) % 4];
+        state[IDX(i,3)] = arr[(3+4-i) % 4];
     }
 }
 
